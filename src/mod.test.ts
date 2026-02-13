@@ -17,6 +17,12 @@ Deno.test("should load and resolve", async () => {
     const text = await plugin.load(value);
     assertEquals(text, Deno.readTextFileSync(value));
   }
+  // non exist file
+  {
+    await plugin.resolveId("./non-exist-file.ts", undefined, {
+      kind: "import-statement",
+    });
+  }
   // node specifier
   {
     const value = await plugin.resolveId("node:events", import.meta.url, {
