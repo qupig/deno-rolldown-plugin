@@ -89,7 +89,14 @@ export default function denoPlugin(
           RequestedModuleType.Default,
         );
       }
-      const result = await loadPromise;
+      let result;
+      try {
+        result = await loadPromise;
+      } catch (error) {
+        if (pluginOptions.debug) {
+          console.error(error);
+        }
+      }
       if (result == null) {
         modules.set(resolvedSpecifier, undefined);
         return resolvedSpecifier;
