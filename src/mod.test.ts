@@ -19,9 +19,10 @@ Deno.test("should load and resolve", async () => {
   }
   // non exist file
   {
-    await plugin.resolveId("./non-exist-file.ts", undefined, {
+    const value = await plugin.resolveId("./non-exist-file.ts", undefined, {
       kind: "import-statement",
     });
+    assertEquals(value, null); // Should return null to allow other plugins to resolve it.
   }
   // node specifier
   {
@@ -31,7 +32,7 @@ Deno.test("should load and resolve", async () => {
     if (typeof value === "string") {
       throw new Error("Fail.");
     }
-    assertEquals(value.external, true);
-    assertEquals(value.id, "node:events");
+    assertEquals(value?.external, true);
+    assertEquals(value?.id, "node:events");
   }
 });

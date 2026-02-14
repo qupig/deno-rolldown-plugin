@@ -33,7 +33,7 @@ export interface DenoPlugin extends Disposable {
     source: string,
     importer: string | undefined,
     options: ResolveIdOptions,
-  ): Promise<string | { id: string; external: boolean }>;
+  ): Promise<null | string | { id: string; external: boolean }>;
   load(id: string): string | undefined;
 }
 
@@ -96,6 +96,7 @@ export default function denoPlugin(
         if (pluginOptions.debug) {
           console.error(error);
         }
+        return null; // Returning `null` defers to other `resolveId` hooks and eventually the default resolution behavior.
       }
       if (result == null) {
         modules.set(resolvedSpecifier, undefined);
